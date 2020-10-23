@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
+ <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+</meta>
+
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+    <head>
+        <title>Soma da série 1/2 + 1/4 + 1/8 + ...</title>
+	    <script src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+    <style>
+		th, td {
+		    text-align: left;		    
+		}
+	</style>
+
+    <body>
+		<a href="https://ideiasesquecidas.com"><img src="https://ideiasesquecidas.files.wordpress.com/2020/04/forgottenlogo.jpg"width="100" height="50" class = "center"> </a>	
+        <p>Prova visual da soma da série 1/2 + 1/4 + 1/8 + ... = 1. Teoria <a href="https://ferramentasexcelvba.wordpress.com/2018/09/02/mil-cardioides-no-excel/">aqui</a> </p>
+	
+	<table style = "width:50%">
+    <tr>
+    <td>
+    
+	  <form>
+		  <label for="fname">N. itens da série:</label><br>
+		  <input type="text" id="SelectLados" name="Lados" value="4"><br>
+		  <input type="button" onclick="Desenha()" value="Gerar!">
+	  </form> 
+	</td>
+    
+	</tr>
+	</table>
+	
+        <script type = "text/javascript">
+
+        var svg = d3.select("body").append("svg");
+
+        var limX = 800;
+        var limY = 800;
+        
+        //Define dimensions of svg
+        svg.attr("width", limX)
+        .attr("height",limY);
+
+	function Desenha()
+        {
+        
+        //Clear svg
+		svg.selectAll("*").remove();
+
+        //dados e definicoes macro
+        var N = parseInt(d3.select("#SelectLados").property("value"));
+		
+
+		var cx0 = 50;
+		var cy0 = 30;
+		
+        //Traça SVG
+        var i;
+        var cx =[];
+        var cy =[];
+		var wid =[];
+        var hei =[];
+		
+		var corR =[];
+		var x=0;
+		var y=0;
+		var fator = 400;
+ 
+        //Cria coordenadas e dimensões 
+        for (i = 1; i< N+1; i++)
+        {
+			if (i % 2 == 0)
+			{	
+				hei.push(fator*1/2**(i/2));
+				wid.push(fator*1/2**(i/2));
+				x = parseInt(x,10) + parseInt(fator*1/2**(i/2),10);
+				y = cy0+ fator*1/2**(i/2);
+				cx.push(cx0+x);
+				cy.push(y);
+			}
+			else{
+				hei.push(fator*1/2**((i-1)/2));
+				wid.push(fator*1/2**((i+1)/2));
+				
+				y =  cy0;
+				cx.push(cx0+x);
+				cy.push(y);
+			}
+			
+		corR.push("rgb(" + String(Math.floor(Math.random() * 150)) + ","+ String(Math.floor(Math.random() * 150)) +","+ String(Math.floor(Math.random() * 150))+")");
+			
+        }
+
+				
+	//Cria os retângulos
+        var rect3 = svg.selectAll("rect")
+         .data(cx)
+         .enter()
+         .append("rect");
+
+        rect3.attr("x", function(d,i){
+           return cx[i];
+          })
+          .attr("y", function(d,i){
+           return cy[i];
+          })
+          .attr("width", function(d,i){
+           return wid[i];
+          })
+          .attr("height", function(d,i){
+           return hei[i];
+          })
+          .attr("fill", function(d,i){return corR[i];})
+          .attr("stroke","black")
+          .attr("stroke-width","1")
+          ;
+          
+       
+		 
+
+        }
+
+        Desenha();
+
+		</script>
+
+    </body>
+</html>
